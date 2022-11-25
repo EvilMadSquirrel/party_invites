@@ -5,13 +5,9 @@ fmt:
 lint: fmt
 	golangci-lint run
 .PHONY:lint
-vet: fmt
-	go vet ./...
-	shadow ./...
-.PHONY:vet
-run: vet
+run: lint
 	go run .
 .PHONY:run
-build: vet
+build: lint
 	go build
 .PHONY:build
