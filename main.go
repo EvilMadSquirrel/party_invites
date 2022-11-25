@@ -7,12 +7,12 @@ import (
 	"net/http"
 )
 
-type Rsvp struct {
+type rsvp struct {
 	Name, Email, Phone string
 	WillAttend         bool
 }
 
-var responses = make([]*Rsvp, 0, 10)
+var responses = make([]*rsvp, 0, 10)
 var templates = make(map[string]*template.Template, 3)
 
 func main() {
@@ -37,9 +37,15 @@ func loadTemplates() {
 }
 
 func welcomeHandler(writer http.ResponseWriter, request *http.Request) {
-	templates["welcome"].Execute(writer, nil)
+	err := templates["welcome"].Execute(writer, nil)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func listHandler(writer http.ResponseWriter, request *http.Request) {
-	templates["list"].Execute(writer, responses)
+	err := templates["list"].Execute(writer, responses)
+	if err != nil {
+		panic(err)
+	}
 }

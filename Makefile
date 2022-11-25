@@ -13,3 +13,6 @@ vet: fmt
 run: vet
 	go run .
 .PHONY:run
+build: vet
+	go build
+.PHONY:build
