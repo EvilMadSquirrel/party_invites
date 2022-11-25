@@ -7,12 +7,17 @@ import (
 	"net/http"
 )
 
-type rsvp struct {
+type Rsvp struct {
 	Name, Email, Phone string
 	WillAttend         bool
 }
 
-var responses = make([]*rsvp, 0, 10)
+type formData struct {
+	*Rsvp
+	Errors []string
+}
+
+var responses = make([]*Rsvp, 0, 10)
 var templates = make(map[string]*template.Template, 3)
 
 func main() {
@@ -20,6 +25,7 @@ func main() {
 
 	http.HandleFunc("/", welcomeHandler)
 	http.HandleFunc("/list", listHandler)
+	http.HandleFunc("/form", formHandler)
 
 	log.Fatal(http.ListenAndServe(":5000", nil))
 }
@@ -47,5 +53,17 @@ func listHandler(writer http.ResponseWriter, request *http.Request) {
 	err := templates["list"].Execute(writer, responses)
 	if err != nil {
 		panic(err)
+	}
+}
+
+func formHandler(writer http.ResponseWriter, request *http.Request) {
+	if request.Method == http.MethodGet {
+		err := templates["form"].Execute(writer, formData{
+			Rsvp:   &Rsvp{},
+			Errors: []string{},
+		})
+		if err != nil {
+			panic(err)
+		}
 	}
 }
