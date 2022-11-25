@@ -11,5 +11,5 @@ vet: fmt
 	shadow ./...
 .PHONY:vet
 run: vet
-	go run main.go
+	go run .
 .PHONY:run
